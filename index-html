@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>♡ Zhi-Ling's Reward ♡</title>
+
+  <!-- LINE 連結預覽卡片設定 -->
+  <meta property="og:title" content="♡ Zhi-Ling's Reward ♡" />
+  <meta property="og:description" content="目前累積點數 — / 30 點正在連線... 正在讀取點數...0% 🎁 給妳的小小驚喜集點卡" />
+  <meta property="og:type" content="website" />
+
+  <style>
+    :root {
+      --bg-teal: #84aeb2;
+      --bg-dot: #99c2c6;
+      --card: #ffffff;
+      --aqua: #6cd4e2;
+      --aqua-light: #e5f6f8;
+      --fin-blue: #1e7cc2;
+      --lip-pink: #f794ae;
+      --sayuri-red: #e85a47;
+      --ink: #223338;
+      --muted: #688187;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 64px 16px 42px;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Helvetica Neue", sans-serif;
+      background-color: var(--bg-teal);
+      background-image:
+        radial-gradient(var(--bg-dot) 22%, transparent 23%),
+        radial-gradient(var(--bg-dot) 22%, transparent 23%);
+      background-position: 0 0, 22px 22px;
+      background-size: 44px 44px;
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 430px;
+      margin: 0 auto;
+    }
+
+    /* 漢頓漫畫風白底粗框卡片（加大間距給邊框漢頓留空間） */
+    .card {
+      position: relative;
+      background: var(--card);
+      border-radius: 22px;
+      padding: 22px 18px 20px;
+      margin-bottom: 52px;
+      border: 2.5px solid var(--ink);
+      box-shadow: 0 5px 0 #5b8589;
+    }
+
+    /* 趴在邊框上的漢頓與小百合插圖 */
+    .mascot {
+      position: absolute;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .hangyodon-sleep {
+      width: 96px;
+      height: 70px;
+      top: -49px;
+      left: 12px;
+    }
+
+    .hangyodon-peek {
+      width: 106px;
+      height: 78px;
+      top: -55px;
+      right: 12px;
+    }
+
+    .sayuri-peek {
+      width: 56px;
+      height: 56px;
+      top: -36px;
+      left: 14px;
+    }
+
+    .hangyodon-bleh {
+      width: 106px;
+      height: 80px;
+      top: -55px;
+      right: 12px;
+    }
+
+    .hangyodon-smug {
+      width: 100px;
+      height: 75px;
+      top: -53px;
+      left: 12px;
+    }
+
+    .hangyodon-think {
+      width: 102px;
+      height: 76px;
+      top: -53px;
+      right: 12px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .character-tag {
+      display: inline-block;
+      background: var(--aqua);
+      color: var(--ink);
+      border: 2px solid var(--ink);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--fin-blue);
+      margin: 0 0 6px;
+      letter-spacing: 0.4px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .subtitle {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin: 0 0 10px;
+      font-weight: 600;
+    }
+
+    .sync-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--ink);
+      background: var(--aqua-light);
+      border: 1.5px solid var(--ink);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--sayuri-red);
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .progress-box {
+      background: var(--aqua-light);
+      border: 2px solid var(--ink);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .points-num {
+      font-size: 25px;
+      color: var(--fin-blue);
+      font-weight: 900;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 14px;
+      background: #ffffff;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--aqua), var(--fin-blue));
+      border-radius: 999px;
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    .stamp {
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      border: 2px dashed #7aaab0;
+      background: #f5fbfc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: #7aaab0;
+      transition: transform 0.25s ease, background 0.25s ease;
+    }
+
+    .stamp.active {
+      border: 2px solid var(--ink);
+      background: var(--aqua);
+      color: #ffffff;
+      font-size: 18px;
+      box-shadow: 0 3px 0 var(--ink);
+      transform: translateY(-1px);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--ink);
+      margin: 0 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .reward-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: var(--aqua-light);
+      border: 1.5px solid var(--ink);
+      border-radius: 14px;
+      margin-bottom: 9px;
+      gap: 10px;
+    }
+
+    .reward-item:last-child { margin-bottom: 0; }
+
+    .reward-name {
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 3px;
+      color: var(--ink);
+    }
+
+    .reward-cost {
+      font-size: 12px;
+      color: var(--fin-blue);
+      font-weight: 700;
+    }
+
+    .badge {
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      white-space: nowrap;
+      border: 1.5px solid var(--ink);
+    }
+
+    .badge-ready { background: var(--lip-pink); color: var(--ink); }
+    .badge-lock { background: #ffffff; color: var(--muted); border-color: #9cbec2; }
+    .badge-done { background: var(--aqua); color: var(--ink); }
+
+    .log-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 170px;
+      overflow-y: auto;
+    }
+
+    .log-item {
+      font-size: 13px;
+      padding: 8px 0;
+      border-bottom: 1.5px dashed #bfd9dc;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .log-item:last-child { border-bottom: none; }
+    .log-date { color: var(--muted); font-size: 12px; white-space: nowrap; }
+
+    /* 管理員面板（平時隱藏） */
+    .admin-panel {
+      display: none;
+      background: #e6f6f8;
+      margin-top: -20px;
+    }
+
+    .admin-panel.open { display: block; }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 2px solid var(--ink);
+      font-size: 16px;
+      outline: none;
+      background: #ffffff;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      border: 2px solid var(--ink);
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 3px 0 var(--ink);
+    }
+
+    button:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--ink);
+    }
+
+    .btn-add { background: var(--fin-blue); color: #ffffff; }
+    .btn-sub { background: var(--lip-pink); color: var(--ink); }
+    .btn-copy {
+      width: 100%;
+      background: var(--aqua);
+      color: var(--ink);
+      font-size: 15px;
+      padding: 13px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(34, 51, 56, 0.45);
+      margin-top: -28px;
+    }
+
+    .footer-mascot {
+      display: block;
+      width: 78px;
+      height: 66px;
+      margin: 0 auto 4px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(34, 51, 56, 0.55);
+      z-index: 99;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 15vh 16px 0;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-box {
+      background: #ffffff;
+      border: 2.5px solid var(--ink);
+      border-radius: 20px;
+      padding: 20px;
+      width: 100%;
+      max-width: 340px;
+      box-shadow: 0 6px 0 var(--ink);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 主集點卡 -->
+    <div class="card">
+      <!-- 漢頓 1：左上角閉眼休息的愛睏漢頓 -->
+      <svg class="mascot hangyodon-sleep" viewBox="0 0 110 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M39 24 C37 12, 47 10, 51 18 C55 9, 66 10, 66 20 C72 13, 80 17, 75 27 Z" fill="#1e7cc2" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <path d="M22 43 C12 39, 11 52, 21 54 Z" fill="#1e7cc2" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <path d="M88 43 C98 39, 99 52, 89 54 Z" fill="#1e7cc2" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <path d="M21 64 C19 34, 36 20, 55 20 C74 20, 91 34, 89 64 Z" fill="#6cd4e2" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <circle cx="42" cy="40" r="9.5" fill="#ffffff" stroke="#223338" stroke-width="2.6"/>
+        <line x1="34" y1="40" x2="50" y2="40" stroke="#223338" stroke-width="2.6" stroke-linecap="round"/>
+        <circle cx="68" cy="40" r="9.5" fill="#ffffff" stroke="#223338" stroke-width="2.6"/>
+        <line x1="60" y1="40" x2="76" y2="40" stroke="#223338" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M31 56 C41 51, 69 51, 79 56 C82 60, 81 66, 73 68 C61 70, 49 70, 37 68 C29 66, 28 60, 31 56 Z" fill="#f794ae" stroke="#223338" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M33 61 Q55 59 77 61" fill="none" stroke="#223338" stroke-width="2.2" stroke-linecap="round"/>
+        <ellipse cx="29" cy="69" rx="8.5" ry="5.5" fill="#6cd4e2" stroke="#223338" stroke-width="2.6"/>
+        <ellipse cx="81" cy="69" rx="8.5" ry="5.5" fill="#6cd4e2" stroke="#223338" stroke-width="2.6"/>
+      </svg>
+
+      <!-- 漢頓 2：右上角趴在邊框偷看的漢頓 -->
+      <svg class="mascot hangyodon-peek" viewBox="0 0 120 88" xmlns="http://www.w3.org/2000/svg">
+        <path d="M43 26 C41 13, 52 11, 56 20 C60 10, 72 11, 72 22 C78 14, 87 19, 82 29 Z" fill="#1e7cc2" stroke="#223338" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M25 46 C14 42, 13 56, 24 58 Z" fill="#1e7cc2" stroke="#223338" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M95 46 C106 42, 107 56, 96 58 Z" fill="#1e7cc2" stroke="#223338" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M24 68 C22 36, 40 22, 60 22 C80 22, 98 36, 96 68 Z" fill="#6cd4e2" stroke="#223338" stroke-width="3" stroke-linejoin="round"/>
+        <circle cx="46" cy="43" r="10.5" fill="#ffffff" stroke="#223338" stroke-width="2.8"/>
+        <circle cx="48" cy="43" r="3.6" fill="#223338"/>
+        <circle cx="74" cy="43" r="10.5" fill="#ffffff" stroke="#223338" stroke-width="2.8"/>
+        <circle cx="72" cy="43" r="3.6" fill="#223338"/>
+        <path d="M34 61 C45 55, 75 55, 86 61 C90 65, 88 72, 80 74 C67 76, 53 76, 40 74 C32 72, 30 65, 34 61 Z" fill="#f794ae" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <path d="M36 66 Q60 64 84 66" fill="none" stroke="#223338" stroke-width="2.3" stroke-linecap="round"/>
+        <ellipse cx="32" cy="75" rx="9.5" ry="6" fill="#6cd4e2" stroke="#223338" stroke-width="2.8"/>
+        <ellipse cx="88" cy="75" rx="9.5" ry="6" fill="#6cd4e2" stroke="#223338" stroke-width="2.8"/>
+      </svg>
+
+      <div class="header">
+        <div class="character-tag">🐟 HANGYODON EDITION 🐙</div>
+        <h1 class="title" id="cardTitle" onclick="handleSecretTap()">♡ Zhi-Ling's Reward ♡</h1>
+        <p class="subtitle" id="cardSubtitle">🎁 給妳的小小驚喜集點卡</p>
+        <div class="sync-pill">
+          <span class="dot" id="syncDot"></span>
+          <span id="syncText">正在連線... 正在讀取點數...</span>
+        </div>
+      </div>
+
+      <div class="progress-box">
+        <div class="progress-top">
+          <span>目前累積點數</span>
+          <span>
+            <span class="points-num" id="currentPoints">—</span> / <span id="maxPoints">30</span> 點
+            (<span id="percentText">0%</span>)
+          </span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div class="grid" id="stampGrid"></div>
+    </div>
+
+    <!-- 隱藏管理員後台 -->
+    <div class="card admin-panel" id="adminPanel">
+      <h2 class="section-title">🔐 專屬管理後台</h2>
+      <input type="text" id="noteInput" placeholder="輸入集點原因（例如：今天超乖 +1）" />
+      <div class="btn-group">
+        <button class="btn-add" onclick="changePoints(1)">＋ 加 1 點</button>
+        <button class="btn-sub" onclick="changePoints(-1)">－ 扣 1 點</button>
+      </div>
+      <button class="btn-copy" onclick="copyShareLink()">📋 複製最新點數連結（貼到 LINE）</button>
+    </div>
+
+    <!-- 獎勵兌換區 -->
+    <div class="card">
+      <!-- 好朋友：紅色小章魚小百合 -->
+      <svg class="mascot sayuri-peek" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 47 C15 54, 21 61, 26 53 C28 60, 34 60, 35 53 C36 60, 42 60, 44 53 C49 61, 55 54, 49 47" fill="#e85a47" stroke="#223338" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16 36 C16 15, 54 15, 54 36 C54 44, 49 49, 49 49 L21 49 C21 49, 16 44, 16 36 Z" fill="#e85a47" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <path d="M24 31 Q27.5 27 31 31" fill="none" stroke="#223338" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M39 31 Q42.5 27 46 31" fill="none" stroke="#223338" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="35" cy="39" r="4.2" fill="#f794ae" stroke="#223338" stroke-width="2.2"/>
+      </svg>
+
+      <!-- 漢頓 3：吐舌頭做鬼臉的調皮漢頓 -->
+      <svg class="mascot hangyodon-bleh" viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg">
+        <path d="M43 26 C41 13, 52 11, 56 20 C60 10, 72 11, 72 22 C78 14, 87 19, 82 29 Z" fill="#1e7cc2" stroke="#223338" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M25 46 C14 42, 13 56, 24 58 Z" fill="#1e7cc2" stroke="#223338" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M95 46 C106 42, 107 56, 96 58 Z" fill="#1e7cc2" stroke="#223338" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M24 68 C22 36, 40 22, 60 22 C80 22, 98 36, 96 68 Z" fill="#6cd4e2" stroke="#223338" stroke-width="3" stroke-linejoin="round"/>
+        <circle cx="46" cy="42" r="10.5" fill="#ffffff" stroke="#223338" stroke-width="2.8"/>
+        <circle cx="49" cy="42" r="3.6" fill="#223338"/>
+        <circle cx="74" cy="42" r="10.5" fill="#ffffff" stroke="#223338" stroke-width="2.8"/>
+        <circle cx="71" cy="42" r="3.6" fill="#223338"/>
+        <path d="M34 60 C45 55, 75 55, 86 60 C90 64, 88 71, 80 73 C67 75, 53 75, 40 73 C32 71, 30 64, 34 60 Z" fill="#f794ae" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <path d="M36 65 Q60 63 84 65" fill="none" stroke="#223338" stroke-width="2.3" stroke-linecap="round"/>
+        <!-- 吐出來的小紅舌頭 -->
+        <path d="M52 65 L52 74 C52 80, 68 80, 68 74 L68 65 Z" fill="#e85a47" stroke="#223338" stroke-width="2.5" stroke-linejoin="round"/>
+        <line x1="60" y1="65" x2="60" y2="73" stroke="#223338" stroke-width="2" stroke-linecap="round"/>
+        <ellipse cx="31" cy="73" rx="9" ry="5.8" fill="#6cd4e2" stroke="#223338" stroke-width="2.6"/>
+        <ellipse cx="89" cy="73" rx="9" ry="5.8" fill="#6cd4e2" stroke="#223338" stroke-width="2.6"/>
+      </svg>
+
+      <h2 class="section-title">🎁 驚喜獎勵兌換清單</h2>
+      <div id="rewardList"></div>
+    </div>
+
+    <!-- 集點紀錄 -->
+    <div class="card" style="margin-bottom: 42px;">
+      <!-- 漢頓 4：半眯著眼偷笑的得意漢頓 -->
+      <svg class="mascot hangyodon-smug" viewBox="0 0 115 86" xmlns="http://www.w3.org/2000/svg">
+        <path d="M40 25 C38 13, 48 11, 52 19 C56 10, 67 11, 67 21 C73 14, 81 18, 76 28 Z" fill="#1e7cc2" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <path d="M23 44 C13 40, 12 53, 22 55 Z" fill="#1e7cc2" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <path d="M87 44 C97 40, 98 53, 88 55 Z" fill="#1e7cc2" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <path d="M22 66 C20 35, 37 21, 55 21 C73 21, 90 35, 88 66 Z" fill="#6cd4e2" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <!-- 半眯得意眼 -->
+        <path d="M33 39 A9.5 9.5 0 0 0 52 39 Z" fill="#ffffff" stroke="#223338" stroke-width="2.6" stroke-linejoin="round"/>
+        <circle cx="45" cy="42" r="3.2" fill="#223338"/>
+        <path d="M58 39 A9.5 9.5 0 0 0 77 39 Z" fill="#ffffff" stroke="#223338" stroke-width="2.6" stroke-linejoin="round"/>
+        <circle cx="70" cy="42" r="3.2" fill="#223338"/>
+        <path d="M32 58 C42 53, 68 53, 78 58 C81 62, 80 68, 72 70 C61 72, 49 72, 38 70 C30 68, 29 62, 32 58 Z" fill="#f794ae" stroke="#223338" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M34 63 Q55 61 76 63" fill="none" stroke="#223338" stroke-width="2.2" stroke-linecap="round"/>
+        <ellipse cx="44" cy="70" rx="8.5" ry="5.8" fill="#6cd4e2" stroke="#223338" stroke-width="2.6"/>
+      </svg>
+
+      <!-- 漢頓 5：歪頭冒出問號的思考漢頓 -->
+      <svg class="mascot hangyodon-think" viewBox="0 0 115 86" xmlns="http://www.w3.org/2000/svg">
+        <path d="M34 25 C32 13, 42 11, 46 19 C50 10, 61 11, 61 21 C67 14, 75 18, 70 28 Z" fill="#1e7cc2" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <path d="M17 44 C7 40, 6 53, 16 55 Z" fill="#1e7cc2" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <path d="M81 44 C91 40, 92 53, 82 55 Z" fill="#1e7cc2" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <path d="M16 66 C14 35, 31 21, 49 21 C67 21, 84 35, 82 66 Z" fill="#6cd4e2" stroke="#223338" stroke-width="2.8" stroke-linejoin="round"/>
+        <circle cx="37" cy="41" r="9.5" fill="#ffffff" stroke="#223338" stroke-width="2.6"/>
+        <circle cx="40" cy="40" r="3.3" fill="#223338"/>
+        <circle cx="62" cy="41" r="9.5" fill="#ffffff" stroke="#223338" stroke-width="2.6"/>
+        <circle cx="65" cy="40" r="3.3" fill="#223338"/>
+        <path d="M26 58 C36 53, 62 53, 72 58 C75 62, 74 68, 66 70 C55 72, 43 72, 32 70 C24 68, 23 62, 26 58 Z" fill="#f794ae" stroke="#223338" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M28 63 Q49 61 70 63" fill="none" stroke="#223338" stroke-width="2.2" stroke-linecap="round"/>
+        <ellipse cx="73" cy="69" rx="8.5" ry="6" fill="#6cd4e2" stroke="#223338" stroke-width="2.6"/>
+        <text x="91" y="34" font-size="23" font-weight="900" fill="#ffffff" stroke="#223338" stroke-width="1.5" font-family="sans-serif">?</text>
+      </svg>
+
+      <h2 class="section-title">📝 最近集點紀錄</h2>
+      <ul class="log-list" id="logList"></ul>
+    </div>
+
+    <div class="footer">
+      <!-- 漢頓 6：底部揮手說嗨的迷你漢頓 -->
+      <svg class="footer-mascot" viewBox="0 0 110 92" xmlns="http://www.w3.org/2000/svg">
+        <path d="M39 24 C37 12, 47 10, 51 18 C55 9, 66 10, 66 20 C72 13, 80 17, 75 27 Z" fill="#1e7cc2" stroke="#223338" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M22 44 C12 40, 11 53, 21 55 Z" fill="#1e7cc2" stroke="#223338" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M88 44 C98 40, 99 53, 89 55 Z" fill="#1e7cc2" stroke="#223338" stroke-width="3" stroke-linejoin="round"/>
+        <ellipse cx="55" cy="48" rx="34" ry="28" fill="#6cd4e2" stroke="#223338" stroke-width="3"/>
+        <circle cx="42" cy="42" r="9.5" fill="#ffffff" stroke="#223338" stroke-width="2.6"/>
+        <circle cx="44" cy="42" r="3.4" fill="#223338"/>
+        <circle cx="68" cy="42" r="9.5" fill="#ffffff" stroke="#223338" stroke-width="2.6"/>
+        <circle cx="66" cy="42" r="3.4" fill="#223338"/>
+        <path d="M31 59 C41 53, 69 53, 79 59 C83 63, 81 70, 73 72 C61 74, 49 74, 37 72 C29 70, 27 63, 31 59 Z" fill="#f794ae" stroke="#223338" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M33 64 Q60 66 77 64" fill="none" stroke="#223338" stroke-width="2.2" stroke-linecap="round"/>
+        <ellipse cx="22" cy="64" rx="8" ry="6" transform="rotate(-25 22 64)" fill="#6cd4e2" stroke="#223338" stroke-width="2.6"/>
+        <ellipse cx="88" cy="64" rx="8" ry="6" transform="rotate(25 88 64)" fill="#6cd4e2" stroke="#223338" stroke-width="2.6"/>
+      </svg>
+      <span onclick="openAuthModal()" style="cursor:pointer;">Made with 🩵 · 管理</span>
+    </div>
+  </div>
+
+  <!-- 密碼驗證視窗 -->
+  <div class="modal" id="authModal">
+    <div class="modal-box">
+      <h3 style="margin:0 0 12px; color:#1e7cc2; font-weight:900;">輸入管理員密碼</h3>
+      <input type="password" id="pwdInput" placeholder="請輸入密碼" />
+      <div class="btn-group" style="margin-bottom:0;">
+        <button class="btn-sub" onclick="closeAuthModal()">取消</button>
+        <button class="btn-add" onclick="verifyPassword()">確認解鎖</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* === 自訂設定區（可直接修改名字、密碼與獎品） === */
+    const CONFIG = {
+      title: "♡ Zhi-Ling's Reward ♡",
+      subtitle: "🎁 給妳的小小驚喜集點卡",
+      maxPoints: 30,
+      adminPassword: "5201314",
+      rewards: [
+        { id: "r1", name: "🧋 任選飲料一杯券", cost: 5 },
+        { id: "r2", name: "🍮 一個小甜點", cost: 10 },
+        { id: "r3", name: "💢惹我生氣抱抱跟說愛我就和好", cost: 20 },
+        { id: "r4", name: "🍲想吃什麼就吃什麼大餐卷", cost: 25 },
+        { id: "r5", name: "🎁 秘密小禮物☝️個", cost: 30 }
+      ]
+    };
+    /* =============================================== */
+
+    let state = {
+      points: 0,
+      redeemed: [],
+      logs: [{ text: "開啟專屬集點卡 ✨", date: formatToday() }]
+    };
+
+    let isAdmin = false;
+    let tapCount = 0;
+
+    function formatToday() {
+      const d = new Date();
+      return `${d.getMonth() + 1}/${d.getDate()}`;
+    }
+
+    function encodeState(obj) {
+      const bytes = new TextEncoder().encode(JSON.stringify(obj));
+      let bin = "";
+      bytes.forEach(b => bin += String.fromCharCode(b));
+      return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    }
+
+    function decodeState(str) {
+      let b64 = str.replace(/-/g, "+").replace(/_/g, "/");
+      while (b64.length % 4) b64 += "=";
+      const bin = atob(b64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return JSON.parse(new TextDecoder().decode(bytes));
+    }
+
+    function loadInitialState() {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("c");
+      if (code) {
+        try {
+          const parsed = decodeState(code);
+          if (typeof parsed.points === "number") {
+            state = {
+              points: Math.max(0, Math.min(CONFIG.maxPoints, parsed.points)),
+              redeemed: Array.isArray(parsed.redeemed) ? parsed.redeemed : [],
+              logs: Array.isArray(parsed.logs) ? parsed.logs : []
+            };
+            localStorage.setItem("zhiling_reward_state", JSON.stringify(state));
+            return;
+          }
+        } catch (e) {}
+      }
+      const saved = localStorage.getItem("zhiling_reward_state");
+      if (saved) {
+        try { state = JSON.parse(saved); } catch (e) {}
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem("zhiling_reward_state", JSON.stringify(state));
+      const newUrl = `${window.location.origin}${window.location.pathname}?c=${encodeState(state)}`;
+      window.history.replaceState(null, "", newUrl);
+    }
+
+    function render() {
+      document.getElementById("cardTitle").textContent = CONFIG.title;
+      document.getElementById("cardSubtitle").textContent = CONFIG.subtitle;
+      document.getElementById("currentPoints").textContent = state.points;
+      document.getElementById("maxPoints").textContent = CONFIG.maxPoints;
+
+      const pct = Math.round((state.points / CONFIG.maxPoints) * 100);
+      document.getElementById("percentText").textContent = `${pct}%`;
+      document.getElementById("progressFill").style.width = `${pct}%`;
+
+      const grid = document.getElementById("stampGrid");
+      grid.innerHTML = "";
+      for (let i = 1; i <= CONFIG.maxPoints; i++) {
+        const div = document.createElement("div");
+        const active = i <= state.points;
+        div.className = `stamp ${active ? "active" : ""}`;
+        div.textContent = active ? "🩷" : i;
+        grid.appendChild(div);
+      }
+
+      const rewardList = document.getElementById("rewardList");
+      rewardList.innerHTML = "";
+      CONFIG.rewards.forEach(r => {
+        const isDone = state.redeemed.includes(r.id);
+        const canRedeem = state.points >= r.cost && !isDone;
+        const item = document.createElement("div");
+        item.className = "reward-item";
+
+        let badgeHtml = "";
+        if (isDone) {
+          badgeHtml = `<span class="badge badge-done">已兌換 ✓</span>`;
+        } else if (canRedeem) {
+          badgeHtml = isAdmin
+            ? `<button class="btn-add" style="padding:6px 10px;font-size:12px;" onclick="toggleRedeem('${r.id}', '${r.name}')">核銷兌換</button>`
+            : `<span class="badge badge-ready">可兌換！</span>`;
+        } else {
+          badgeHtml = `<span class="badge badge-lock">差 ${r.cost - state.points} 點</span>`;
+        }
+
+        item.innerHTML = `
+          <div>
+            <div class="reward-name">${r.name}</div>
+            <div class="reward-cost">需要 ${r.cost} 點</div>
+          </div>
+          ${badgeHtml}
+        `;
+        rewardList.appendChild(item);
+      });
+
+      const logList = document.getElementById("logList");
+      logList.innerHTML = "";
+      state.logs.slice(0, 15).forEach(log => {
+        const li = document.createElement("li");
+        li.className = "log-item";
+        li.innerHTML = `<span>${log.text}</span><span class="log-date">${log.date}</span>`;
+        logList.appendChild(li);
+      });
+    }
+
+    function handleSecretTap() {
+      tapCount++;
+      if (tapCount >= 5) {
+        tapCount = 0;
+        openAuthModal();
+      }
+    }
+
+    function openAuthModal() {
+      if (isAdmin) return;
+      document.getElementById("authModal").classList.add("open");
+      setTimeout(() => document.getElementById("pwdInput").focus(), 100);
+    }
+
+    function closeAuthModal() {
+      document.getElementById("authModal").classList.remove("open");
+      document.getElementById("pwdInput").value = "";
+    }
+
+    function verifyPassword() {
+      const val = document.getElementById("pwdInput").value;
+      if (val === CONFIG.adminPassword) {
+        isAdmin = true;
+        document.getElementById("adminPanel").classList.add("open");
+        closeAuthModal();
+        render();
+      } else {
+        alert("密碼錯誤喔！");
+      }
+    }
+
+    function changePoints(delta) {
+      const next = state.points + delta;
+      if (next < 0 || next > CONFIG.maxPoints) return;
+      const note = document.getElementById("noteInput").value.trim();
+      state.points = next;
+      const actionText = delta > 0 ? `＋${delta} 點` : `${delta} 點`;
+      state.logs.unshift({
+        text: note ? `${actionText}｜${note}` : `${actionText}｜專屬獎勵點數`,
+        date: formatToday()
+      });
+      document.getElementById("noteInput").value = "";
+      saveState();
+      render();
+    }
+
+    function toggleRedeem(id, name) {
+      if (!state.redeemed.includes(id)) {
+        state.redeemed.push(id);
+        state.logs.unshift({
+          text: `🎉 已兌換：${name}`,
+          date: formatToday()
+        });
+        saveState();
+        render();
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try {
+        document.execCommand("copy");
+        alert("已複製最新集點卡連結！直接貼到 LINE 傳給對方就可以了 🩵");
+      } catch (err) {
+        prompt("請全選複製以下連結傳給對方：", text);
+      }
+      document.body.removeChild(ta);
+    }
+
+    async function copyShareLink() {
+      saveState();
+      const shareUrl = window.location.href;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          alert("已複製最新集點卡連結！直接貼到 LINE 傳給對方就可以了 🩵");
+          return;
+        } catch (e) {}
+      }
+      fallbackCopy(shareUrl);
+    }
+
+    loadInitialState();
+    setTimeout(() => {
+      document.getElementById("syncText").textContent = "已連線 🩵 專屬點數同步完成";
+      document.getElementById("syncDot").style.background = "#1e7cc2";
+      render();
+    }, 550);
+  </script>
+</body>
+</html>
